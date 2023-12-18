@@ -1,6 +1,8 @@
 ﻿using IntermediateTheory_Include_Introduce_Dapper.Data;
 using IntermediateTheory_Include_Introduce_Dapper.Models;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 
 namespace IntermediateTheory_Include_Introduce_Dapper
@@ -29,53 +31,34 @@ namespace IntermediateTheory_Include_Introduce_Dapper
                 Price = 943.38m,
             };
 
-            StringBuilder sql = new StringBuilder(@"
-                insert into [TutorialAppSchema].[Computer] (
-                    Motherboard,
-                    HasWifi,
-                    HasLTE,
-                    ReleaseDate,
-                    Price,
-                    VideoCard 
-                ) values ");
+            StringBuilder sql = new StringBuilder("\n" + @"insert into [TutorialAppSchema].[Computer] (
+                Motherboard,
+                HasWifi,
+                HasLTE,
+                ReleaseDate,
+                Price,
+                VideoCard 
+            ) values ");
 
-            sql.AppendLine("(")
-                .AppendLine($"'{computer.Motherboard}',")
-                .AppendLine($"'{computer.HasWifi}',")
-                .AppendLine($"'{computer.HasLTE}',")
-                .AppendLine($"'{computer.ReleaseDate}',")
-                .AppendLine($"'{computer.Price}',")
-                .AppendLine($"'{computer.VideoCard}'")
+            sql.Append("(")
+                .Append($"'{computer.Motherboard}',")
+                .Append($"'{computer.HasWifi}',")
+                .Append($"'{computer.HasLTE}',")
+                .Append($"'{computer.ReleaseDate}',")
+                .Append($"'{computer.Price}',")
+                .Append($"'{computer.VideoCard}'")
                 .AppendLine(")");
+            
+            string currentPath = new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.Parent.FullName + "\\";
 
-            //Console.WriteLine(sql);
+            File.WriteAllText(currentPath + "\\" + "log.txt", sql.ToString());
 
-            //int result = dbConnection.Execute(sql.ToString());
+            string logtxt = $"{currentPath}log.txt";
+            using StreamWriter openFile = new($"{currentPath}log.txt", append: true);
+            openFile.WriteLine(sql.ToString());
+            openFile.Close();
 
-            string sqlSelect = @"
-                select
-                    Computer.Motherboard,
-                    Computer.HasWifi,
-                    Computer.HasLTE,
-                    Computer.ReleaseDate,
-                    Computer.Price,
-                    Computer.VideoCard 
-                from TutorialAppSchema.Computer";
-
-            IEnumerable<Computer> computers = dapper.LoadData<Computer>(sqlSelect);
-
-            foreach (Computer singleComputer in ef.Computer.ToList())
-            {   
-                Console.WriteLine(new StringBuilder()                
-                .Append("(")
-                .Append($"'{singleComputer.Motherboard}',")
-                .Append($"'{singleComputer.HasWifi}',")
-                .Append($"'{singleComputer.HasLTE}',")
-                .Append($"'{singleComputer.ReleaseDate}',")
-                .Append($"'{singleComputer.Price}',")
-                .Append($"'{singleComputer.VideoCard}'")
-                .AppendLine(")").ToString());
-            }
+            Console.WriteLine(File.ReadAllText(logtxt));
         }
     }
 }

@@ -1,0 +1,16 @@
+
+                insert into [TutorialAppSchema].[Computer] (
+                    Motherboard,
+                    HasWifi,
+                    HasLTE,
+                    ReleaseDate,
+                    Price,
+                    VideoCard 
+                ) values (
+'Z690',
+'True',
+'False',
+'12/18/2023 9:33:47 PM',
+'943.38',
+'RTX 2060'
+)
