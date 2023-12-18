@@ -28,13 +28,13 @@ namespace IntermediateTheory_Include_Introduce_Dapper.Data
             return dbConnection.QuerySingle<T>(sql);
         }
 
-        public bool ExecuteSql<T>(string sql)
+        public bool ExecuteSql(string sql)
         {
             IDbConnection dbConnection = new SqlConnection(_connectionString);
             return (dbConnection.Execute(sql) > 0); 
         }
 
-        public int ExecuteSqlWithRowCount<T>(string sql)
+        public int ExecuteSqlWithRowCount(string sql)
         {
             IDbConnection dbConnection = new SqlConnection(_connectionString);
             return dbConnection.Execute(sql);
